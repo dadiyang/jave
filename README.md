@@ -45,9 +45,9 @@ ffmpeg 是依赖运行环境的，JAVE 项目封装了ffmpeg，它通过上述�
 
 本项目为解决上述问题而生。
 
-* 这是一个maven项目，可以发布到maven仓库。
-* 项目依赖的 ffmpeg 可执行文件经过验证可以使用（单元测试中提供一个简单可选的检验方法）
-* 解决了amr转mp3出现的 EncoderException （其实导致这个异常的原因并没有处理，只是直接忽略异常而已，而且忽略那些异常转换也是成功的）
+* 这是一个maven项目，而且已发布到中央仓库。
+* 项目依赖的 ffmpeg 可执行文件经过验证可以使用（单元测试中提供了一个简单的检验方法）
+* 解决了amr转mp3出现的 EncoderException: Stream mapping 
 * 支持 Linux/Windows/Mac 平台
 
 # 扩展
