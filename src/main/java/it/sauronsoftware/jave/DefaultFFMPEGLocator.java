@@ -64,13 +64,13 @@ public class DefaultFFMPEGLocator extends FFMPEGLocator {
         File temp = null;
         String ffmpegHome = System.getProperty("ffmpeg.home");
         if (ffmpegHome != null && !"".equals(ffmpegHome)) {
-            System.out.println("ffmpeg.home is not empty: " + ffmpegHome);
+            System.out.println("ffmpeg.home: " + ffmpegHome);
             temp = new File(ffmpegHome);
         }
         if (temp == null || !temp.exists()) {
-            System.out.println("ffmpeg.home does not exists, use default path: " + ffmpegHome);
             temp = new File(System.getProperty("java.io.tmpdir"), "jave-"
                     + myEXEversion);
+            System.out.println("ffmpeg.home does not exists, use default bin path: " + temp.getAbsolutePath());
         }
         if (!temp.exists()) {
             temp.mkdirs();
