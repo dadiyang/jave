@@ -13,7 +13,7 @@ import java.io.File;
  * 音频转换工具
  *
  * @author dadiyang
- * @date 2018/12/14
+ * date 2018/12/14
  */
 public class AudioUtils {
     /**
