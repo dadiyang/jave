@@ -6,7 +6,7 @@ This tool is mainly used to convert the AMR to MP3 format for playing in the aud
 
 Linux, Windows and Mac is all supported.
 
-Based on a well known project, named JAVE which relies on [ffmpeg] (http://ffmpeg.org/), this tool can be used to all ffmpeg supported format conversion. See [JAVE official documentation] (http://www.sauronsoftware.it/projects/jave/manual.php) for details.
+Based on a well known project, named JAVE which relies on [ffmpeg](http://ffmpeg.org/), this tool can be used to all ffmpeg supported format conversion. See [JAVE official documentation](http://www.sauronsoftware.it/projects/jave/manual.php) for details.
 
 # USE EXAMPLE
 
