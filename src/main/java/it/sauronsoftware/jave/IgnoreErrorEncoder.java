@@ -5,19 +5,18 @@ import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
 
 /**
  * 忽略所有转换过程中的异常
  *
  * @author dadiyang
- * @date 2018/12/18
+ * date 2018/12/18
  */
 public class IgnoreErrorEncoder extends Encoder {
     private Logger log = LoggerFactory.getLogger(IgnoreErrorEncoder.class);
 
     @Override
-    protected void processErrorOutput(EncodingAttributes attributes, BufferedReader errorReader, File source, EncoderProgressListener listener) throws EncoderException, IOException {
+    protected void processErrorOutput(EncodingAttributes attributes, BufferedReader errorReader, File source, EncoderProgressListener listener) {
         try {
             String line;
             while ((line = errorReader.readLine()) != null) {
