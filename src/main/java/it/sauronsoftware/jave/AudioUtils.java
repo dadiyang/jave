@@ -39,7 +39,7 @@ public class AudioUtils {
             throw new IllegalArgumentException("source file does not exists: " + source.getAbsoluteFile());
         }
         AudioAttributes audio = new AudioAttributes();
-        AmrToMp3Encoder encoder = new AmrToMp3Encoder();
+        Encoder encoder = new IgnoreErrorEncoder();
         audio.setCodec("libmp3lame");
         EncodingAttributes attrs = new EncodingAttributes();
         attrs.setFormat("mp3");

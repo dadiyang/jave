@@ -18,6 +18,9 @@
  */
 package it.sauronsoftware.jave;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -33,12 +36,12 @@ import java.io.OutputStream;
  * @author Carlo Pelliccia
  */
 public class DefaultFFMPEGLocator extends FFMPEGLocator {
-
+    private static final Logger log = LoggerFactory.getLogger(DefaultFFMPEGLocator.class);
     /**
      * Trace the version of the bundled ffmpeg executable. It's a counter: every
      * time the bundled ffmpeg change it is incremented by 1.
      */
-    private static final int myEXEversion = 1;
+    private static final int MYEX_EVERSION = 1;
 
     /**
      * The ffmpeg executable file path.
@@ -64,13 +67,13 @@ public class DefaultFFMPEGLocator extends FFMPEGLocator {
         File temp = null;
         String ffmpegHome = System.getProperty("ffmpeg.home");
         if (ffmpegHome != null && !"".equals(ffmpegHome)) {
-            System.out.println("ffmpeg.home: " + ffmpegHome);
+            log.info("ffmpeg.home: " + ffmpegHome);
             temp = new File(ffmpegHome);
         }
         if (temp == null || !temp.exists()) {
             temp = new File(System.getProperty("java.io.tmpdir"), "jave-"
-                    + myEXEversion);
-            System.out.println("ffmpeg.home does not exists, use default bin path: " + temp.getAbsolutePath());
+                    + MYEX_EVERSION);
+            log.info("ffmpeg.home does not exists, use default bin path: " + temp.getAbsolutePath());
         }
         if (!temp.exists()) {
             temp.mkdirs();
@@ -79,7 +82,7 @@ public class DefaultFFMPEGLocator extends FFMPEGLocator {
         // ffmpeg executable export on disk.
         String suffix = isWindows ? ".exe" : isMac ? "-mac" : "";
         File exe = new File(temp, "ffmpeg" + suffix);
-        if (!exe.exists()) {
+        if (!exe.exists() || exe.length() <= 0) {
             copyFile("bin/ffmpeg" + suffix, exe);
         }
         // pthreadGC2.dll
@@ -119,7 +122,7 @@ public class DefaultFFMPEGLocator extends FFMPEGLocator {
         InputStream input = null;
         OutputStream output = null;
         try {
-            input = getClass().getResourceAsStream(path);
+            input = getClass().getClassLoader().getResourceAsStream(path);
             output = new FileOutputStream(dest);
             byte[] buffer = new byte[1024];
             int l;
@@ -133,17 +136,21 @@ public class DefaultFFMPEGLocator extends FFMPEGLocator {
             if (output != null) {
                 try {
                     output.close();
-                } catch (Throwable t) {
-                    ;
+                } catch (Throwable ignored) {
+
                 }
             }
             if (input != null) {
                 try {
                     input.close();
-                } catch (Throwable t) {
-                    ;
+                } catch (Throwable ignored) {
                 }
             }
+        }
+        if (!dest.exists()) {
+            String errMsg = "copy ffmpeg executable file to " + dest.getAbsolutePath() + " fail";
+            log.info(errMsg);
+            throw new IllegalStateException(errMsg);
         }
     }
 
