@@ -16,6 +16,9 @@ import java.io.File;
  * date 2018/12/14
  */
 public class AudioUtils {
+
+    private static final String LIBMP_3_LAME = "libmp3lame";
+
     /**
      * amr转mp3
      *
@@ -35,19 +38,33 @@ public class AudioUtils {
      * @param target 目标存放地址
      */
     public static void amrToMp3(File source, File target) {
+        convert(source, target, "mp3");
+    }
+
+    /**s
+     * amr转wav
+     *
+     * @param source 音频来源
+     * @param target 目标存放地址
+     */
+    public static void amrToWav(File source, File target) {
+        convert(source, target, "wav");
+    }
+
+    public static void convert(File source, File target, String format) {
         if (!source.exists()) {
             throw new IllegalArgumentException("source file does not exists: " + source.getAbsoluteFile());
         }
         AudioAttributes audio = new AudioAttributes();
         Encoder encoder = new IgnoreErrorEncoder();
-        audio.setCodec("libmp3lame");
+        audio.setCodec(LIBMP_3_LAME);
         EncodingAttributes attrs = new EncodingAttributes();
-        attrs.setFormat("mp3");
+        attrs.setFormat(format);
         attrs.setAudioAttributes(audio);
         try {
             encoder.encode(source, target, attrs);
         } catch (Exception e) {
-            throw new IllegalStateException("convert amr to mp3 error: ", e);
+            throw new IllegalStateException("convert amr to " + format + " error: ", e);
         }
     }
 }
