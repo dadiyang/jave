@@ -42,6 +42,8 @@ public class DefaultFFMPEGLocator extends FFMPEGLocator {
      * time the bundled ffmpeg change it is incremented by 1.
      */
     private static final int MYEX_EVERSION = 1;
+    private static final String WINDOWS = "windows";
+    private static final String MAC = "mac";
 
     /**
      * The ffmpeg executable file path.
@@ -57,11 +59,11 @@ public class DefaultFFMPEGLocator extends FFMPEGLocator {
         boolean isWindows;
         boolean isMac = false;
         String os = System.getProperty("os.name").toLowerCase();
-        if (os.contains("windows")) {
+        if (os.contains(WINDOWS)) {
             isWindows = true;
         } else {
             isWindows = false;
-            isMac = os.contains("mac");
+            isMac = os.contains(MAC);
         }
         // Temp dir?
         File temp = null;
@@ -87,7 +89,7 @@ public class DefaultFFMPEGLocator extends FFMPEGLocator {
         }
         // pthreadGC2.dll
         if (isWindows) {
-            File dll = new File(temp, "bin/pthreadGC2.dll");
+            File dll = new File(temp, "pthreadGC2.dll");
             if (!dll.exists()) {
                 copyFile("bin/pthreadGC2.dll", dll);
             }
