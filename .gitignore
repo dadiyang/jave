@@ -26,5 +26,5 @@
 /dist/
 /nbdist/
 /.nb-gradle/
-*.mp3
-*.wav
+/*.mp3
+/*.wav
