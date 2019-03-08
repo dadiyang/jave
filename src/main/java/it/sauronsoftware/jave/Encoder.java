@@ -551,8 +551,6 @@ public class Encoder {
 								+ (hours * 60L * 60L * 1000L);
 						info.setDuration(duration);
 						step++;
-					} else {
-						step = 3;
 					}
 				} else if (step == 2) {
 					Matcher m = p3.matcher(line);
