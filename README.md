@@ -16,7 +16,7 @@
  <dependency>
     <groupId>com.github.dadiyang</groupId>
     <artifactId>jave</artifactId>
-    <version>1.0.4</version>
+    <version>1.0.5</version>
  </dependency>
 ```
 

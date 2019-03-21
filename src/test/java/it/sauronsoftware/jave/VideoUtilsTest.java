@@ -10,7 +10,7 @@ import static org.junit.Assert.*;
  * 测试视频工具
  *
  * @author huangxuyang
- * @date 2019/3/21
+ * @since 2019/3/21
  */
 public class VideoUtilsTest {
 

@@ -6,7 +6,7 @@ import java.io.File;
  * 视频相关工具
  *
  * @author lynk-coder
- * @date 2019/3/21
+ * @since 2019/3/21
  */
 public class VideoUtils {
 
