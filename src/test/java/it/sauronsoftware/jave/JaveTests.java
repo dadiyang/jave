@@ -36,7 +36,6 @@ public class JaveTests {
             MultimediaInfo amrInfo = encoder.getInfo(source);
             System.out.println("amr duration:" + amrInfo.getDuration());
             assertTrue("Duration of the amr source file must greater than 0", amrInfo.getDuration() > 0);
-
             MultimediaInfo mp3Info = encoder.getInfo(mp3Source);
             System.out.println("mp3 duration: " + mp3Info.getDuration());
             assertTrue("Duration of the mp3 source file must greater than 0", mp3Info.getDuration() > 0);
