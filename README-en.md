@@ -16,7 +16,7 @@ Based on a well known project, named JAVE which relies on [ffmpeg](http://ffmpeg
  <dependency>
     <groupId>com.github.dadiyang</groupId>
     <artifactId>jave</artifactId>
-    <version>1.0.5</version>
+    <version>1.0.6</version>
  </dependency>
 ```
 
