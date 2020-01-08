@@ -845,27 +845,6 @@ public class Encoder {
 		}
 	}
 
-	/**
-	 *
-	 * @param cmdList
-	 * @throws EncoderException
-	 */
-	public void encode(File source, List<String> cmdList, EncoderProgressListener listener) throws EncoderException {
-		FFMPEGExecutor ffmpeg = locator.createExecutor();
-		ffmpeg.addArgument("-i");
-		ffmpeg.addArgument(source.getAbsolutePath());
-		for (String s : cmdList) {
-			ffmpeg.addArgument(s);
-		}
-		try {
-			ffmpeg.execute();
-		} catch (IOException e) {
-			throw new EncoderException(e);
-		} finally {
-			ffmpeg.destroy();
-		}
-	}
-
 	protected void processErrorOutput(EncodingAttributes attributes, BufferedReader errorReader, File source, EncoderProgressListener listener) throws EncoderException, IOException {
 		String lastWarning = null;
 		long progress = 0L;
