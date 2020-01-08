@@ -42,7 +42,20 @@ public class VideoUtils {
      * @param source
      */
     public static void mp4ToM3u8(File source, File target, VideoSize videoSize) {
-        Encoder encoder = new IgnoreErrorEncoder();
+        mp4ToM3u8(source, target, videoSize, null);
+    }
+
+    public static void mp4ToM3u8(String source, String target, VideoSize videoSize, EncoderProgressListener listener) {
+        mp4ToM3u8(new File(source), new File(target), videoSize, listener);
+    }
+
+    /**
+     * mp4转m3u8
+     * @param source
+     */
+    public static void mp4ToM3u8(File source, File target, VideoSize videoSize, EncoderProgressListener listener) {
+//        Encoder encoder = new IgnoreErrorEncoder();
+        Encoder encoder = new Encoder();
         VideoAttributes video = new VideoAttributes();
         video.setCodec("libx264");
         video.setSize(videoSize);
@@ -55,12 +68,11 @@ public class VideoUtils {
         attrs.setVideoAttributes(video);
         attrs.setAudioAttributes(audio);
         try {
-            encoder.encode(source, target, attrs);
+            encoder.encode(source, target, attrs, listener);
         } catch (Exception e) {
             throw new IllegalStateException("error: ", e);
         }
     }
-
 
 
 
