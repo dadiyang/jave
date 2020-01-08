@@ -32,7 +32,7 @@ import java.util.Arrays;
  *
  * @author Carlo Pelliccia
  */
-class FFMPEGExecutor {
+public class FFMPEGExecutor {
     private static final Logger log = LoggerFactory.getLogger(FFMPEGExecutor.class);
     /**
      * The path of the ffmpeg executable.

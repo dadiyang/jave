@@ -45,9 +45,6 @@ public class AudioUtils {
     }
 
     public static void convert(File source, File target, String format) {
-        if (!source.exists()) {
-            throw new IllegalArgumentException("source file does not exists: " + source.getAbsoluteFile());
-        }
         AudioAttributes audio = new AudioAttributes();
         Encoder encoder = new IgnoreErrorEncoder();
         audio.setCodec(LIBMP_3_LAME);

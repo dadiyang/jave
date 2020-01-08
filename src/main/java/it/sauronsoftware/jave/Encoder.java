@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -739,6 +740,9 @@ public class Encoder {
 	public void encode(File source, File target, EncodingAttributes attributes,
 			EncoderProgressListener listener) throws IllegalArgumentException,
 			InputFormatException, EncoderException {
+        if (!source.exists()) {
+            throw new IllegalArgumentException("source file does not exists: " + source.getAbsoluteFile());
+        }
 		String formatAttribute = attributes.getFormat();
 		Float offsetAttribute = attributes.getOffset();
 		Float durationAttribute = attributes.getDuration();
@@ -787,8 +791,7 @@ public class Encoder {
 			VideoSize size = videoAttributes.getSize();
 			if (size != null) {
 				ffmpeg.addArgument("-s");
-				ffmpeg.addArgument(String.valueOf(size.getWidth()) + "x"
-						+ String.valueOf(size.getHeight()));
+				ffmpeg.addArgument(size.getWidth() + "x" + size.getHeight());
 			}
 		}
 		if (audioAttributes == null) {
@@ -820,10 +823,13 @@ public class Encoder {
 				ffmpeg.addArgument(String.valueOf(volume.intValue()));
 			}
 		}
+
 		ffmpeg.addArgument("-f");
 		ffmpeg.addArgument(formatAttribute);
-		ffmpeg.addArgument("-y");
-		ffmpeg.addArgument(target.getAbsolutePath());
+
+		//根据不同的format插入不同的命令参数
+        FormatEnum.get(formatAttribute).handle(ffmpeg, target);
+
 		try {
 			ffmpeg.execute();
 		} catch (IOException e) {
@@ -839,6 +845,26 @@ public class Encoder {
 		}
 	}
 
+	/**
+	 *
+	 * @param cmdList
+	 * @throws EncoderException
+	 */
+	public void encode(File source, List<String> cmdList, EncoderProgressListener listener) throws EncoderException {
+		FFMPEGExecutor ffmpeg = locator.createExecutor();
+		ffmpeg.addArgument("-i");
+		ffmpeg.addArgument(source.getAbsolutePath());
+		for (String s : cmdList) {
+			ffmpeg.addArgument(s);
+		}
+		try {
+			ffmpeg.execute();
+		} catch (IOException e) {
+			throw new EncoderException(e);
+		} finally {
+			ffmpeg.destroy();
+		}
+	}
 
 	protected void processErrorOutput(EncodingAttributes attributes, BufferedReader errorReader, File source, EncoderProgressListener listener) throws EncoderException, IOException {
 		String lastWarning = null;

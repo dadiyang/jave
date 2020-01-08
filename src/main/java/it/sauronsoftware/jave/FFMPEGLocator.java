@@ -33,7 +33,7 @@ public abstract class FFMPEGLocator {
 	 * 
 	 * @return The path of the ffmpeg executable.
 	 */
-	protected abstract String getFFMPEGExecutablePath();
+	public abstract String getFFMPEGExecutablePath();
 
 	/**
 	 * It returns a brand new {@link FFMPEGExecutor}, ready to be used in a
@@ -42,7 +42,7 @@ public abstract class FFMPEGLocator {
 	 * @return A newly instanced {@link FFMPEGExecutor}, using this locator to
 	 *         call the ffmpeg executable.
 	 */
-	FFMPEGExecutor createExecutor() {
+	public FFMPEGExecutor createExecutor() {
 		return new FFMPEGExecutor(getFFMPEGExecutablePath());
 	}
 
