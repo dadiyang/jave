@@ -1,8 +1,6 @@
 package it.sauronsoftware.jave;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 视频相关工具
@@ -33,14 +31,18 @@ public class VideoUtils {
         }
     }
 
-    public static void mp4ToM3u8(String source, String target, VideoSize videoSize) {
-        mp4ToM3u8(new File(source), new File(target), videoSize);
+    public static void mp4ToM3u8(String source, String target) {
+        mp4ToM3u8(source, target, null, null);
     }
 
-    /**
-     * mp4转m3u8
-     * @param source
-     */
+    public static void mp4ToM3u8(File source, File target) {
+        mp4ToM3u8(source, target, null, null);
+    }
+
+    public static void mp4ToM3u8(String source, String target, VideoSize videoSize) {
+        mp4ToM3u8(source, target, videoSize, null);
+    }
+
     public static void mp4ToM3u8(File source, File target, VideoSize videoSize) {
         mp4ToM3u8(source, target, videoSize, null);
     }
@@ -54,15 +56,12 @@ public class VideoUtils {
      * @param source
      */
     public static void mp4ToM3u8(File source, File target, VideoSize videoSize, EncoderProgressListener listener) {
-//        Encoder encoder = new IgnoreErrorEncoder();
         Encoder encoder = new Encoder();
         VideoAttributes video = new VideoAttributes();
         video.setCodec("libx264");
         video.setSize(videoSize);
-
         AudioAttributes audio = new AudioAttributes();
         audio.setCodec("mp3");
-
         EncodingAttributes attrs = new EncodingAttributes();
         attrs.setFormat(FormatEnum.ssegment.name());
         attrs.setVideoAttributes(video);
