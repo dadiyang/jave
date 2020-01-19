@@ -22,9 +22,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.StringTokenizer;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -739,6 +739,9 @@ public class Encoder {
 	public void encode(File source, File target, EncodingAttributes attributes,
 			EncoderProgressListener listener) throws IllegalArgumentException,
 			InputFormatException, EncoderException {
+        if (!source.exists()) {
+            throw new IllegalArgumentException("source file does not exists: " + source.getAbsoluteFile());
+        }
 		String formatAttribute = attributes.getFormat();
 		Float offsetAttribute = attributes.getOffset();
 		Float durationAttribute = attributes.getDuration();
@@ -787,8 +790,7 @@ public class Encoder {
 			VideoSize size = videoAttributes.getSize();
 			if (size != null) {
 				ffmpeg.addArgument("-s");
-				ffmpeg.addArgument(String.valueOf(size.getWidth()) + "x"
-						+ String.valueOf(size.getHeight()));
+				ffmpeg.addArgument(size.getWidth() + "x" + size.getHeight());
 			}
 		}
 		if (audioAttributes == null) {
@@ -820,10 +822,13 @@ public class Encoder {
 				ffmpeg.addArgument(String.valueOf(volume.intValue()));
 			}
 		}
+
 		ffmpeg.addArgument("-f");
 		ffmpeg.addArgument(formatAttribute);
-		ffmpeg.addArgument("-y");
-		ffmpeg.addArgument(target.getAbsolutePath());
+
+		//根据不同的format插入不同的命令参数
+        FormatEnum.get(formatAttribute).handle(ffmpeg, target);
+
 		try {
 			ffmpeg.execute();
 		} catch (IOException e) {
@@ -839,9 +844,7 @@ public class Encoder {
 		}
 	}
 
-
 	protected void processErrorOutput(EncodingAttributes attributes, BufferedReader errorReader, File source, EncoderProgressListener listener) throws EncoderException, IOException {
-		String lastWarning = null;
 		long progress = 0L;
 		Float offsetAttribute = attributes.getOffset();
 		MultimediaInfo info = parseMultimediaInfo(source, (RBufferedReader)errorReader);
@@ -862,76 +865,53 @@ public class Encoder {
 		}
 		int step = 0;
 		String line;
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
+		Calendar calendar = Calendar.getInstance();
 		while ((line = errorReader.readLine()) != null) {
 			if (step == 0) {
 				if (line.startsWith("WARNING: ")) {
-					if (listener != null)
-						listener.message(line);
+					if (listener != null) listener.message(line);
 				} else {
-					if (!line.startsWith("Output #0")) {
-						throw new EncoderException(line);
-					}
+					if (!line.startsWith("Output #0"))
+						if (listener != null) listener.message(line);
 					step++;
 				}
-			} else if ((step == 1) &&
-					(!line.startsWith("  "))) {
+			} else if ((step == 1) && (!line.startsWith("  "))) {
 				step++;
-			}
-
-			if (step == 2) {
-				if (!line.startsWith("Stream mapping:")) {
-					throw new EncoderException(line);
-				}
+			} else if (step == 2) {
+				if (!line.startsWith("Stream mapping:"))
+					if (listener != null) listener.message(line);
 				step++;
-			}
-			else if ((step == 3) &&
-					(!line.startsWith("  "))) {
+			} else if ((step == 3) && (!line.startsWith("  "))) {
 				step++;
-			}
-
-			if (step == 4) {
+			} else if (step == 4) {
 				line = line.trim();
 				if (line.length() > 0) {
 					Hashtable table = parseProgressInfoLine(line);
-					if (table == null) {
-						if (listener != null) {
-							listener.message(line);
-						}
-						lastWarning = line;
-					} else {
+					if (table != null) {
 						if (listener != null) {
 							String time = (String)table.get("time");
-							if (time != null) {
-								int dot = time.indexOf(46);
-								if ((dot > 0) && (dot == time.length() - 2) && (duration > 0L))
-								{
-									String p1 = time.substring(0, dot);
-									String p2 = time.substring(dot + 1);
-									try {
-										long i1 = Long.parseLong(p1);
-										long i2 = Long.parseLong(p2);
-										progress = i1 * 1000L + i2 * 100L;
-
-										int perm = (int)Math.round(progress * 1000L / duration);
-
-										if (perm > 1000) {
-											perm = 1000;
-										}
-										listener.progress(perm);
-									}
-									catch (NumberFormatException e) {
-									}
+							if (time != null && (duration > 0L)) {
+								try {
+									Date data = simpleDateFormat.parse(time);
+									calendar.setTime(data);
+									int hour = calendar.get(Calendar.HOUR_OF_DAY);
+									int minute = calendar.get(Calendar.MINUTE);
+									int second = calendar.get(Calendar.SECOND);
+									long i1 = (second + minute * 60 + hour * 60 * 60);
+									progress = i1 * 1000L;
+									int perm = Math.round(progress * 1000L / duration);
+									if (perm > 1000) perm = 1000;
+									listener.progress(perm);
+								} catch (Exception e) {
+									e.printStackTrace();
 								}
+
 							}
 						}
-						lastWarning = null;
 					}
 				}
 			}
 		}
-		if ((lastWarning != null) &&
-				(!SUCCESS_PATTERN.matcher(lastWarning).matches()))
-			throw new EncoderException(lastWarning);
 	}
-
 }

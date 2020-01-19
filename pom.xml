@@ -4,33 +4,33 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.github.dadiyang</groupId>
+    <groupId>com.github.zywayh</groupId>
     <artifactId>jave</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.6</version>
+    <version>1.0.7</version>
     <parent>
         <groupId>org.sonatype.oss</groupId>
         <artifactId>oss-parent</artifactId>
         <version>9</version>
     </parent>
-    <licenses>
-        <license>
-            <name>GNU General Public License (GPL)</name>
-            <url>http://www.gnu.org/licenses/gpl.txt</url>
-        </license>
-    </licenses>
-    <scm>
-        <url>https://github.com/dadiyang/jave</url>
-        <connection>https://github.com/dadiyang/jave.git</connection>
-        <developerConnection>https://github.com/dadiyang/jave</developerConnection>
-    </scm>
-    <developers>
-        <developer>
-            <name>Xuyang Huang</name>
-            <email>dadiyang@aliyun.com</email>
-            <url>https://github.com/dadiyang/jave</url>
-        </developer>
-    </developers>
+    <!--<licenses>-->
+        <!--<license>-->
+            <!--<name>GNU General Public License (GPL)</name>-->
+            <!--<url>http://www.gnu.org/licenses/gpl.txt</url>-->
+        <!--</license>-->
+    <!--</licenses>-->
+    <!--<scm>-->
+        <!--<url>https://github.com/dadiyang/jave</url>-->
+        <!--<connection>https://github.com/dadiyang/jave.git</connection>-->
+        <!--<developerConnection>https://github.com/dadiyang/jave</developerConnection>-->
+    <!--</scm>-->
+    <!--<developers>-->
+        <!--<developer>-->
+            <!--<name>Xuyang Huang</name>-->
+            <!--<email>dadiyang@aliyun.com</email>-->
+            <!--<url>https://github.com/dadiyang/jave</url>-->
+        <!--</developer>-->
+    <!--</developers>-->
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <slf4j.version>1.7.25</slf4j.version>
@@ -54,7 +54,9 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
     <build>
+        <finalName>jave</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -72,5 +74,15 @@
             </plugin>
         </plugins>
     </build>
+
+    <!-- nexus私服配置 start -->
+    <distributionManagement>
+        <repository>
+            <id>releases</id>
+            <url>http://47.95.13.52:16500/repository/maven-releases/</url>
+        </repository>
+    </distributionManagement>
+    <!-- nexus私服配置 start -->
+
 
 </project>

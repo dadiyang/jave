@@ -109,7 +109,7 @@ public class DefaultFFMPEGLocator extends FFMPEGLocator {
     }
 
     @Override
-    protected String getFFMPEGExecutablePath() {
+    public String getFFMPEGExecutablePath() {
         return path;
     }
 
